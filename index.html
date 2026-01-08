@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Info Restok XC-Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0b0b0e;
+  --card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.10);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,0.70);
+  --ready:#2ecc71;
+  --habis:#e74c3c;
+  --accent:#caa86a;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#1a1a1f,var(--bg));
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+.container{width:100%;max-width:560px}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:14px}
+.header h1{
+  font-size:20px;
+  color:var(--accent);
+  margin:0;
+  letter-spacing:.4px;
+}
+#updateTime{font-size:12px;opacity:.6;margin-top:6px}
+
+/* TAB */
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+.tab{
+  flex:1;
+  text-align:center;
+  padding:10px 8px;
+  font-size:12px;
+  border-radius:12px;
+  cursor:pointer;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+  transition:.18s ease;
+  user-select:none;
+}
+.tab:hover{transform:translateY(-1px)}
+.tab.active{
+  background:rgba(202,168,106,.15);
+  border-color:rgba(202,168,106,.6);
+  color:var(--accent);
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(8px);
+}
+.category-title{
+  text-align:center;
+  font-size:16px;
+  margin:2px 0 12px 0;
+  letter-spacing:.3px;
+}
+
+/* ITEM */
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px dashed var(--border);
+  position:relative; /* penting untuk dropdown */
+}
+.item:last-child{border-bottom:none}
+
+/* NAME + PRICE (INLINE) */
+.name-wrap{min-width:0; padding-right:10px;}
+.name-line{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  min-width:0;
+}
+.name{
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.15px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.price-badge{
+  flex:0 0 auto;
+  font-size:12px;
+  color:rgba(202,168,106,.95);
+  border:1px solid rgba(202,168,106,.35);
+  background:rgba(202,168,106,.10);
+  padding:3px 8px;
+  border-radius:999px;
+  line-height:1.2;
+}
+.subtext{
+  font-size:12px;
+  color:var(--muted);
+  opacity:.75;
+  margin-top:4px;
+}
+
+/* STATUS */
+.status-box{display:flex;gap:6px;cursor:pointer;user-select:none;align-items:center}
+.status{font-size:13px;font-weight:700}
+.ready{color:var(--ready)}
+.habis{color:var(--habis)}
+.arrow{font-size:12px;opacity:.85; margin-left:2px}
+
+/* DROPDOWN */
+.dropdown{
+  position:absolute;
+  right:0;
+  top:46px;
+  background:#111;
+  border:1px solid var(--border);
+  border-radius:12px;
+  display:none;
+  overflow:hidden;
+  z-index:10;
+  min-width:160px;
+  box-shadow:0 12px 26px rgba(0,0,0,.45);
+}
+.dropdown div{
+  padding:10px 14px;
+  font-size:13px;
+  cursor:pointer;
+}
+.dropdown div:hover{background:rgba(255,255,255,.08)}
+
+/* EXPORT */
+.export-btn{
+  margin-top:14px;
+  padding:12px;
+  text-align:center;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(202,168,106,0.12);
+  color:var(--accent);
+  font-size:14px;
+  cursor:pointer;
+  transition:.18s ease;
+  box-shadow:var(--shadow);
+}
+.export-btn:hover{background:rgba(202,168,106,0.20);transform:translateY(-1px)}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>INFO RESTOK by XC-STORE</h1>
+    <div id="updateTime">Update: -</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="xl">XL CIRCLE</div>
+    <div class="tab" data-tab="v1">AKRAB V1</div>
+    <div class="tab" data-tab="v2">AKRAB V2</div>
+  </div>
+
+  <div class="card">
+    <div class="category-title" id="categoryTitle"></div>
+    <div id="stokList"></div>
+  </div>
+
+  <div class="export-btn" onclick="exportWA()">📤 Export WhatsApp</div>
+
+</div>
+
+<script>
+/* JAM & TANGGAL */
+function updateTanggalJam(){
+  const n=new Date();
+  document.getElementById("updateTime").textContent =
+    "Update: "+n.toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})+
+    " • "+n.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})+" WIB";
+}
+updateTanggalJam();
+setInterval(updateTanggalJam,60000);
+
+/* DATA PRODUK (ISI harga:0 -> ganti sesuai harga kamu) */
+const dataProduk={
+  xl:{title:"XL CIRCLE",items:[
+    { nama:"XL Circle OK 5GB", harga:20000 },{ nama:"XL Circle 5–9GB", harga:21000 },{ nama:"XL Circle 10–14GB", harga:26000 },{ nama:"XL Circle 15–19GB", harga:31000 },
+    { nama:"XL Circle 20–24GB", harga:36000 },{ nama:"XL Circle 25–29GB", harga:41000 },{ nama:"XL Circle 30–34GB", harga:46000 },
+    { nama:"XL Circle 35–39GB", harga:51000 },{ nama:"XL Circle 40–44GB", harga:56000 },{ nama:"XL Circle 45–49GB", harga:61000 },
+    { nama:"XL Circle 50–54GB", harga:66000 },{ nama:"XL Circle 55–59GB", harga:71000 },{ nama:"XL Circle 60–64GB", harga:76000 },
+    { nama:"XL Circle 65–69GB", harga:81000 },{ nama:"XL Circle 70–74GB", harga:86000 },{ nama:"XL Circle 75–79GB", harga:91000 },
+    { nama:"XL Circle 80–84GB", harga:96000 },{ nama:"XL Circle 85–89GB", harga:101000 },{ nama:"XL Circle 90–94GB", harga:106000 },
+    { nama:"XL Circle 95–99GB", harga:111000 },{ nama:"XL Circle 100–104GB", harga:116000 },{ nama:"XL Circle 105–109GB", harga:121000 },
+    { nama:"XL Circle 110–114GB", harga:126000 },{ nama:"XL Circle 115–119GB", harga:131000 }
+  ]},
+  v1:{title:"PAKET AKRAB V1",items:[
+    { nama:"Akrab V1 13-30GB", harga:47000 },{ nama:"Akrab V1 19-36GB", harga:51000 },{ nama:"Akrab V1 25-42GB", harga:56000 },
+    { nama:"Akrab V1 31-48GB", harga:61000 },{ nama:"Akrab V1 38-55GB", harga:66000 },{ nama:"Akrab V1 47-64GB", harga:71000 },
+    { nama:"Akrab V1 50-67GB", harga:74000 },{ nama:"Akrab V1 54-71GB", harga:76000 },{ nama:"Akrab V1 63-80GB", harga:85000 },
+    { nama:"Akrab V1 76-93GB", harga:93000 },{ nama:"Akrab V1 88-105GB", harga:102000 },{ nama:"Akrab V1 110-163GB", harga:125000 }
+  ]},
+  v2:{title:"PAKET AKRAB V2",items:[
+    { nama:"Akrab V2 13GB Reguler + Kuota Area", harga:46000 },{ nama:"Akrab V2 19GB Reguler + Kuota Area", harga:49000 },
+    { nama:"Akrab V2 25GB Reguler + Kuota Area", harga:55000 },{ nama:"Akrab V2 31GB Reguler + Kuota Area", harga:60000 },
+    { nama:"Akrab V2 38GB Reguler + Kuota Area", harga:64000 },{ nama:"Akrab V2 47GB Reguler + Kuota Area", harga:69000 },
+    { nama:"Akrab V2 50GB Reguler + Kuota Area", harga:74000 },{ nama:"Akrab V2 63GB Reguler + Kuota Area", harga:82000 },
+    { nama:"Akrab V2 64GB Reguler + Kuota Area", harga:91000 },{ nama:"Akrab V2 76GB Reguler + Kuota Area", harga:92000 },
+    { nama:"Akrab V2 88GB Reguler + Kuota Area", harga:101000 },{ nama:"Akrab V2 105GB Reguler + Kuota Area", harga:124000 }
+  ]}
+};
+
+let activeTab="xl";
+const stokList=document.getElementById("stokList");
+const categoryTitle=document.getElementById("categoryTitle");
+
+/* RENDER TAB */
+function renderTab(key){
+  activeTab=key;
+  stokList.innerHTML="";
+  categoryTitle.textContent=dataProduk[key].title;
+
+  const saved=JSON.parse(localStorage.getItem("stok_"+key)||"{}");
+
+  dataProduk[key].items.forEach(item=>{
+    const nama=item.nama;
+    const harga=Number(item.harga||0);
+    const status=saved[nama]||"habis";
+
+    const hargaLabel = harga>0 ? ("Rp " + harga.toLocaleString("id-ID")) : "Rp -";
+
+    const row=document.createElement("div");
+    row.className="item";
+    row.innerHTML=`
+      <div class="name-wrap">
+        <div class="name-line">
+          <div class="name" title="${nama}">${nama}</div>
+          <div class="price-badge">${hargaLabel}</div>
+        </div>
+      </div>
+
+      <div class="status-box">
+        <div class="status ${status}">
+          ${status==="ready"?"✔ Stok Ready":"✖ Stok Habis"}
+        </div>
+        <div class="arrow">▼</div>
+      </div>
+
+      <div class="dropdown">
+        <div class="ready">✔ Stok Ready</div>
+        <div class="habis">✖ Stok Habis</div>
+      </div>
+    `;
+
+    const statusEl=row.querySelector(".status");
+    const dropdown=row.querySelector(".dropdown");
+
+    row.querySelector(".status-box").onclick=e=>{
+      e.stopPropagation();
+      closeAll();
+      dropdown.style.display="block";
+    };
+
+    dropdown.children[0].onclick=()=>setStatus(nama,"ready",statusEl,dropdown);
+    dropdown.children[1].onclick=()=>setStatus(nama,"habis",statusEl,dropdown);
+
+    stokList.appendChild(row);
+  });
+}
+
+function setStatus(nama,val,el,dd){
+  el.className="status "+val;
+  el.textContent=val==="ready"?"✔ Stok Ready":"✖ Stok Habis";
+
+  const data=JSON.parse(localStorage.getItem("stok_"+activeTab)||"{}");
+  data[nama]=val;
+  localStorage.setItem("stok_"+activeTab,JSON.stringify(data));
+
+  dd.style.display="none";
+}
+
+function closeAll(){
+  document.querySelectorAll(".dropdown").forEach(d=>d.style.display="none");
+}
+document.addEventListener("click",closeAll);
+
+/* TAB CLICK */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    renderTab(t.dataset.tab);
+  };
+});
+
+/* EXPORT WHATSAPP (ikut harga) */
+function exportWA(){
+  const data=JSON.parse(localStorage.getItem("stok_"+activeTab)||"{}");
+  const n=new Date();
+
+  let text=`📦 INFO RESTOK ${dataProduk[activeTab].title}\n`;
+  text+=`Update: ${n.toLocaleDateString("id-ID",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})} • `;
+  text+=`${n.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})} WIB\n`;
+  text+="━━━━━━━━━━━━━━━━━━\n";
+
+  dataProduk[activeTab].items.forEach(item=>{
+    const nama=item.nama;
+    const harga=Number(item.harga||0);
+    const hargaLabel = harga>0 ? ("Rp " + harga.toLocaleString("id-ID")) : "Rp -";
+    const status = data[nama]==="ready" ? "✅" : "❌";
+    text+=`${nama} (${hargaLabel}) ${status}\n`;
+  });
+
+  text+="━━━━━━━━━━━━━━━━━━\nKeterangan:\n✅ (Stok Ready)\n❌ (Stok Habis)";
+  window.open("https://wa.me/?text="+encodeURIComponent(text));
+}
+
+/* DEFAULT */
+renderTab("xl");
+</script>
+
+</body>
+</html>
