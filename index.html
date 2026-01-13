@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>INFO STOK PAKET AKRAB & CIRCLE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0b0b0e;
+  --card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.10);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,0.70);
+  --ready:#2ecc71;
+  --habis:#e74c3c;
+  --accent:#caa86a;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;font-family:"Segoe UI",system-ui,sans-serif}
+
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#1a1a1f,var(--bg));
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+.container{width:100%;max-width:560px}
+
+/* ===============================
+   RGB GLASS HEADER – PREMIUM
+   =============================== */
+
+.header{
+  text-align:center;
+  margin-bottom:32px;
+}
+
+.header-frame{
+  position:relative;
+  display:inline-block;
+  padding:20px 34px;
+  border-radius:32px;
+  overflow:hidden;
+  isolation:isolate;
+
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+
+  border:1px solid rgba(255,255,255,.25);
+
+  box-shadow:
+    0 30px 70px rgba(0,0,0,.65),
+    inset 0 0 0 1px rgba(255,255,255,.1);
+
+  animation:glassPulse 5s ease-in-out infinite;
+}
+
+/* RGB GLOW BACKGROUND */
+.header-frame::before{
+  content:"";
+  position:absolute;
+  inset:-80px;
+  z-index:-1;
+
+  background:
+    linear-gradient(
+      120deg,
+      #ff5f6d,
+      #ffc371,
+      #6a82fb,
+      #00f2fe,
+      #ff5f6d
+    );
+  background-size:400% 400%;
+
+  filter:blur(60px);
+  opacity:.55;
+
+  animation:rgbFlow 6s linear infinite;
+}
+
+/* RGB EDGE SHINE */
+.header-frame::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      140deg,
+      rgba(255,0,128,.55),
+      rgba(0,200,255,.55),
+      rgba(120,255,150,.55),
+      rgba(255,200,0,.55)
+    );
+  background-size:300% 300%;
+
+  opacity:.35;
+  mix-blend-mode:screen;
+  filter:blur(18px);
+
+  animation:rgbEdge 4s ease-in-out infinite;
+}
+
+/* TEXT */
+.header-title{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.5px;
+  white-space:nowrap;
+
+  background:linear-gradient(
+    90deg,
+    #ffd27d,
+    #ffffff,
+    #ffd27d
+  );
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  animation:textGlow 4s ease-in-out infinite;
+}
+
+.header-sub{
+  margin-top:6px;
+  font-size:11px;
+  letter-spacing:.4px;
+  color:rgba(255,255,255,.8);
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes rgbFlow{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+@keyframes rgbEdge{
+  0%,100%{
+    background-position:0% 50%;
+    opacity:.25;
+  }
+  50%{
+    background-position:100% 50%;
+    opacity:.45;
+  }
+}
+
+@keyframes glassPulse{
+  0%,100%{
+    backdrop-filter:blur(22px) saturate(150%);
+  }
+  50%{
+    backdrop-filter:blur(28px) saturate(180%);
+  }
+}
+
+@keyframes textGlow{
+  0%{background-position:0% center}
+  50%{background-position:100% center}
+  100%{background-position:0% center}
+}
+
+/* HOME */
+.home-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.cat-card{
+  position:relative;
+
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+
+  padding:22px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s ease;
+  box-shadow:var(--shadow);
+}
+
+/* GARIS RGB */
+.cat-card::after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:16px;
+  pointer-events:none;
+
+  background:linear-gradient(
+    120deg,
+    #ff4d4d,
+    #ffcc70,
+    #5ddcff,
+    #c77dff,
+    #7cffc4,
+    #ff4d4d
+  );
+  background-size:300% 300%;
+
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  -webkit-mask-composite:xor;
+
+  padding:1px;          /* ketebalan garis */
+  opacity:.9;
+
+  animation:rgbFlow 6s linear infinite;
+}
+
+/* HOVER */
+.cat-card:hover{
+  transform:translateY(-3px);
+}
+
+/* TEXT */
+.cat-title{font-size:14px;font-weight:600}
+.cat-sub{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* ANIMASI WARNA (TIDAK ROTATE) */
+@keyframes rgbFlow{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+
+/* INFO BOX */
+.info-box{
+  margin-top:16px;
+  padding:14px;
+  border-radius:14px;
+  border:1px dashed rgba(202,168,106,.45);
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+}
+
+/* STOCK */
+.hidden{display:none}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+
+.update-time{
+  font-size:12px;
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:12px;
+}
+
+.item{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px dashed var(--border);
+}
+.item:last-child{border-bottom:none}
+
+.name{font-size:14px;font-weight:600}
+.price{font-size:12px;color:var(--accent)}
+
+.status{
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.ready{color:var(--ready)}
+.habis{color:var(--habis)}
+
+.export-btn{
+  margin-top:14px;
+  padding:12px;
+  text-align:center;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(202,168,106,.12);
+  color:var(--accent);
+  cursor:pointer;
+}
+.back-btn{
+  margin-top:14px;
+  margin-bottom:14px;
+  padding:10px 14px;
+  text-align:center;
+  font-size:13px;
+  color:var(--accent);
+  border:1px solid rgba(202,168,106,.45);
+  border-radius:14px;
+  background:rgba(202,168,106,.08);
+  cursor:pointer;
+  transition:.2s;
+}
+.back-btn:hover{
+  background:rgba(202,168,106,.16);
+}
+.admin-on{
+  border-color:#2ecc71 !important;
+  color:#2ecc71 !important;
+  background:rgba(46,204,113,.1) !important;
+}
+.reset-btn{
+  background:rgba(231,76,60,.15);
+  color:#e74c3c;
+  border:1px solid rgba(231,76,60,.45);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="header" id="mainHeader">
+  <div class="header-frame">
+    <div class="header-title">
+      INFO STOK PAKET AKRAB & CIRCLE
+    </div>
+    <div class="header-sub">
+      by XC-Store
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="home">
+  <div class="home-grid">
+    <div class="cat-card" onclick="openLocal('v1')">
+      <div class="cat-title">AKRAB V1</div>
+      <div class="cat-sub">Stok Manual</div>
+    </div>
+
+    <div class="cat-card" onclick="openLink('https://juraganxl.my.id/')">
+      <div class="cat-title">AKRAB V2 & CIRCLE</div>
+      <div class="cat-sub">Stok Otomatis</div>
+    </div>
+
+    <div class="cat-card" onclick="openLink('https://xlstock.serversaya.site/')">
+      <div class="cat-title">AKRAB V3</div>
+      <div class="cat-sub">Stok Otomatis</div>
+    </div>
+
+    <div class="cat-card" onclick="openLocal('v4')">
+      <div class="cat-title">AKRAB V4</div>
+      <div class="cat-sub">Stok Manual</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <b>📢 INFORMASI PENTING!!!</b><br>
+    <br>
+    AKRAB V2 & CIRCLE:<br>
+    Kode XDA = AKRAB V2 <br>
+    Kode XCLP = CIRCLE
+  </div>
+</div>
+
+<!-- STOCK PAGE -->
+<div id="stockPage" class="hidden">
+  <div class="back-btn" onclick="goHome()">↩️ Kembali ke Kategori</div>
+  <div class="card">
+    <div class="update-time" id="updateTime"></div>
+    <div id="stokList"></div>
+  </div>
+
+  <div class="export-btn" onclick="exportWA()">📤 Export WhatsApp</div>
+  <div class="export-btn reset-btn hidden" id="resetBtn" onclick="resetStok()">
+  🔄 Reset Stok
+</div>
+  <!-- ADMIN TOGGLE -->
+<div class="back-btn" id="adminToggle" onclick="toggleAdmin()">
+  🔐 Masuk Admin
+</div>
+
+</div>
+
+<script type="module">
+/* ===============================
+   FIREBASE SETUP
+   =============================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  onValue,
+  off
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDMDVVf9oXT98KBSmDc7iFdMORrDWX4vRc",
+  authDomain: "info-stok-paket-xc-dc752.firebaseapp.com",
+  databaseURL: "https://info-stok-paket-xc-dc752-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "info-stok-paket-xc-dc752",
+  storageBucket: "info-stok-paket-xc-dc752.firebasestorage.app",
+  messagingSenderId: "35886358414",
+  appId: "1:35886358414:web:38652479146a85e4550edf"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* ===============================
+   KONFIG ADMIN
+   =============================== */
+const ADMIN_PASSWORD = "4224";
+
+/* ===============================
+   DATA PRODUK
+   =============================== */
+const produk = {
+  v1:{
+    label:"AKRAB V1",
+    items:[
+      {nama:"Akrab V1 13–30GB",harga:47000},
+      {nama:"Akrab V1 19–36GB",harga:51000},
+      {nama:"Akrab V1 25–42GB",harga:56000},
+      {nama:"Akrab V1 31–48GB",harga:61000},
+      {nama:"Akrab V1 38–55GB",harga:66000},
+      {nama:"Akrab V1 47–64GB",harga:71000},
+      {nama:"Akrab V1 50–67GB",harga:74000},
+      {nama:"Akrab V1 54–71GB",harga:76000},
+      {nama:"Akrab V1 63–80GB",harga:85000},
+      {nama:"Akrab V1 76–93GB",harga:93000},
+      {nama:"Akrab V1 88–105GB",harga:102000},
+      {nama:"Akrab V1 110–162GB",harga:125000}
+    ]
+  },
+  v4:{
+    label:"AKRAB V4",
+    items:[
+      {nama:"Akrab V4 - (XBS1) 15GB",harga:48000},
+      {nama:"Akrab V4 - (XBS2) 33GB",harga:62000},
+      {nama:"Akrab V4 - (XBS3) 40GB",harga:67000},
+      {nama:"Akrab V4 - (XBS4) 49GB",harga:72000},
+      {nama:"Akrab V4 - (XBS5) 90GB",harga:102000}
+    ]
+  }
+};
+
+/* ===============================
+   STATE GLOBAL
+   =============================== */
+let activeKey = "";
+let isAdmin = false;
+let currentRef = null;
+
+/* ===============================
+   ELEMENT DOM
+   =============================== */
+const stokList   = document.getElementById("stokList");
+const updateTime = document.getElementById("updateTime");
+const home       = document.getElementById("home");
+const stockPage  = document.getElementById("stockPage");
+const mainHeader = document.getElementById("mainHeader");
+const adminToggle= document.getElementById("adminToggle");
+const resetBtn   = document.getElementById("resetBtn");
+
+/* ===============================
+   NAVIGASI
+   =============================== */
+window.openLink = url => location.href = url;
+
+window.openLocal = key => {
+  activeKey = key;
+  home.classList.add("hidden");
+  stockPage.classList.remove("hidden");
+  mainHeader.classList.add("hidden");
+  renderRealtime();
+};
+
+window.goHome = () => {
+  if(currentRef){
+    off(currentRef, "value");
+    currentRef = null;
+  }
+  stockPage.classList.add("hidden");
+  home.classList.remove("hidden");
+  mainHeader.classList.remove("hidden");
+};
+
+/* ===============================
+   REALTIME RENDER (ANTI LOOP)
+   =============================== */
+function renderRealtime(){
+  if(currentRef){
+    off(currentRef, "value");
+    currentRef = null;
+  }
+
+  currentRef = ref(db, "stok/" + activeKey);
+
+  onValue(currentRef, snap=>{
+    const data = snap.val() || {};
+    stokList.innerHTML = "";
+
+    updateTime.innerHTML =
+      `<b>Update:</b> ${new Date().toLocaleString("id-ID")} WIB`;
+
+    produk[activeKey].items.forEach(i=>{
+      const status = data[i.nama] || "habis";
+      const row = document.createElement("div");
+      row.className = "item";
+      row.innerHTML = `
+        <div>
+          <div class="name">${i.nama}</div>
+          <div class="price">Rp ${i.harga.toLocaleString("id-ID")}</div>
+        </div>
+        <div class="status ${status}" onclick="toggleStatus('${i.nama}')">
+          ${status === "ready" ? "READY" : "HABIS"}
+        </div>
+      `;
+      stokList.appendChild(row);
+    });
+  });
+}
+
+/* ===============================
+   ADMIN ACTION
+   =============================== */
+window.toggleStatus = nama => {
+  if(!isAdmin) return;
+  const r = ref(db, `stok/${activeKey}/${nama}`);
+  get(r).then(snap=>{
+    set(r, snap.val() === "ready" ? "habis" : "ready");
+  });
+};
+
+window.resetStok = () => {
+  if(!isAdmin) return;
+  if(!confirm("Reset semua stok ke HABIS?")) return;
+
+  const d = {};
+  produk[activeKey].items.forEach(i => d[i.nama] = "habis");
+  set(ref(db,"stok/"+activeKey), d);
+};
+
+window.exportWA = () => {
+  get(ref(db,"stok/"+activeKey)).then(snap=>{
+    const d = snap.val() || {};
+    let t = `📦 INFO STOK ${produk[activeKey].label}\n━━━━━━━━━━━━━━━━━━\n`;
+    produk[activeKey].items.forEach(i=>{
+      t += `${i.nama} - ${d[i.nama]==="ready"?"✅ READY":"❌ HABIS"}\n`;
+    });
+    window.open("https://wa.me/?text="+encodeURIComponent(t));
+  });
+};
+
+window.toggleAdmin = () => {
+  if(!isAdmin){
+    if(prompt("Password Admin") !== ADMIN_PASSWORD) return alert("Salah");
+    isAdmin = true;
+  } else {
+    isAdmin = false;
+  }
+
+  adminToggle.textContent = isAdmin ? "🔓 Mode Admin Aktif" : "🔐 Masuk Admin";
+  adminToggle.classList.toggle("admin-on", isAdmin);
+  resetBtn.classList.toggle("hidden", !isAdmin);
+};
+</script>
+
+</body>
+</html>
